@@ -1,0 +1,4 @@
+openai>=1.0.0
+pydantic>=2.0.0
+python-dotenv>=1.0.0
+# paddleocr>=2.7.0  # 暂时注释，避免环境依赖过重，后续需要接入真实OCR解析图片时再开启

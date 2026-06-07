@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Art Preview</title>
+    <style>
+        @font-face {
+            font-family: 'zpix';
+            src: url('assets/fonts/zpix.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            background-color: #0F172A;
+            color: #F8FAFC;
+            font-family: 'zpix', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            margin: 0;
+        }
+        .container {
+            width: 800px;
+            max-width: 100%;
+        }
+        .preview-box {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            border: 4px solid #000;
+            box-shadow: 8px 8px 0px #000;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            background-color: #1E293B;
+        }
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* 像素风图片放大时保持锐利 */
+            image-rendering: pixelated; 
+        }
+        .boss-image {
+            position: absolute;
+            bottom: 20%;
+            right: 10%;
+            width: 30%;
+            height: auto;
+            /* 像素风图片放大时保持锐利 */
+            image-rendering: pixelated;
+            /* 简单的呼吸/悬浮动画 */
+            animation: float 2s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        h1 {
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px #000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Algorithm RPG - Visual Preview</h1>
+    <div class="container">
+        <p>This is a combination of AI generated Background + Boss.</p>
+        <div class="preview-box">
+            <!-- 背景图 -->
+            <img src="assets/images/bg_dungeon.png" class="bg-image" alt="Dungeon Background" onerror="this.src='https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=16-bit%20pixel%20art%20of%20a%20dark%20dungeon%20background%2C%20stone%20walls%2C%20glowing%20green%20torches%2C%20retro%20gaming%20style%2C%20no%20characters&image_size=landscape_16_9'">
+            <!-- 怪兽图 (带悬浮动画) -->
+            <img src="assets/images/boss_dragon.png" class="boss-image" alt="Boss Dragon" onerror="this.src='https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=16-bit%20pixel%20art%20of%20a%20terrifying%20dragon%20made%20of%20metal%20chains%20and%20links%2C%20glowing%20red%20eyes%2C%20dark%20fantasy%20retro%20game%20boss%2C%20solid%20black%20background&image_size=square'">
+        </div>
+    </div>
+</body>
+</html>

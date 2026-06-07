@@ -1,0 +1,53 @@
+@font-face {
+  font-family: 'zpix';
+  src: url('/assets/fonts/zpix.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    /* 全局使用可点击的小手光标，增强游戏感 */
+    cursor: pointer; 
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+@layer utilities {
+  .pixel-rendering {
+    image-rendering: pixelated;
+  }
+  
+  .animate-bounce-short {
+    animation: bounce-short 0.5s ease-out;
+  }
+
+  @keyframes bounce-short {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-25%); }
+  }
+
+  /* 像素风滚动条 */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 12px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #0f172a;
+    border-left: 2px solid #000;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #475569;
+    border: 2px solid #000;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+  }
+}
