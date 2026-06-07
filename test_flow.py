@@ -7,7 +7,7 @@ load_dotenv()
 
 # 添加后端目录到 python path，以便导入
 sys.path.append(os.path.join(os.path.dirname(__file__), 'ai_engine'))
-from server import call_cloud_ocr, ocr_engine
+from server import call_cloud_ocr
 from level_generator import LevelGenerator
 
 def main():
@@ -21,25 +21,14 @@ def main():
         image_bytes = f.read()
         
     print("=== 2. 执行 OCR 识别 ===")
-    use_cloud = os.getenv("USE_CLOUD_OCR", "false").lower() == "true"
-    
     extracted_text = ""
     try:
-        if use_cloud:
-            print("[*] 正在调用云端 AI Studio OCR...")
-            extracted_text = call_cloud_ocr(image_bytes)
-        else:
-            print("[*] 正在调用本地 PaddleOCR...")
-            import numpy as np
-            import cv2
-            nparr = np.frombuffer(image_bytes, np.uint8)
-            img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-            result = ocr_engine.ocr(img)
-            text_lines = []
-            if result and result[0]:
-                for line in result[0]:
-                    text_lines.append(line[1][0])
-            extracted_text = "\n".join(text_lines)
+        # 直接使用云端 OCR
+        print("[*] 正在调用云端 OCR API...")
+        # 为了测试这里只是模拟一下逻辑，因为需要上传图片字节流
+        # 如果需要测试真实云端 OCR，可以直接调用 server.py 的接口
+        print("[*] 提示：云端 OCR 已在 server.py 中全面开启")
+        extracted_text = call_cloud_ocr(image_bytes)
     except Exception as e:
         print(f"[!] OCR 识别失败: {str(e)}")
         return

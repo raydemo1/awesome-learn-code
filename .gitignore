@@ -25,3 +25,4 @@ dist-ssr
 .env
 dist/
 ai_engine/__pycache__/
+.vercel

@@ -1,57 +1,51 @@
-# React + TypeScript + Vite
+# ⚔️ Algorithm RPG: 算法打怪升级平台
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**"一款将枯燥算法题转化为硬核复古像素风 RPG 的 AI 驱动打怪升级平台，让刷题变成打怪升级的沉浸式冒险。"**
 
-Currently, two official plugins are available:
+## 📖 创作故事
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+每一个学编程的人，都曾在一块白板和一堆冰冷的测试用例前感到过绝望。传统刷题最大的痛苦在于“正反馈太弱，且容易陷入死记硬背”。
+某天深夜，在又一次被“二叉树的深度优先遍历”折磨得头昏脑涨时，一个疯狂的念头诞生了：**如果把这棵二叉树变成一只盘踞在黑暗地牢里的“树精王”呢？**
 
-## Expanding the ESLint configuration
+为了实现这个疯狂的想法，我们将最前沿的 AI 技术与最复古的像素美学结合在了一起：
+1. **“造题大脑”**：接入了强大的大语言模型。你只需要把随便一道作业题或面试题（截图/文本）丢给它，AI 就会瞬间将其拆解，提取出考察的核心逻辑，并动态生成包含怪兽名称、回合制选项、以及内存可视化数据的 JSON 关卡。
+2. **纯云端 OCR**：为了极致的用户体验，系统**彻底摒弃了繁重的本地 PaddleOCR 依赖**，全量接入云端 OCR API。只需上传题目截图，云端即可毫秒级解析出文本并召唤怪兽，玩家无需在本地配置任何笨重的深度学习环境。
+3. **“复古灵魂”**：全面采用了硬核的 **16-bit 像素风 (Pixel Art)**。从纯黑粗边框、`Zpix` 像素中文字体，到跳动的英雄精灵图 (Sprite Animator)，再到 RPG Awesome 的古典魔法图标。每一次点击，都能唤醒童年玩经典 RPG 时的多巴胺。
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+在这场冒险里，没有枯燥的死记硬背，只有每一次精准逻辑推演后带来的畅快暴击。你不仅是在通关游戏，更是在一步步铸就自己无坚不摧的编程大脑。
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 🚀 快速启动
+
+本项目分为 **前端 (React + Vite)** 和 **后端 (FastAPI + AI 引擎)** 两部分。
+
+### 1. 启动后端 AI 引擎
+
+进入后端目录并安装轻量级依赖（无需安装庞大的深度学习库）：
+```bash
+cd ai_engine
+pip install -r requirements.txt
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  extends: [
-    // other configs...
-    // Enable lint rules for React
-    reactX.configs['recommended-typescript'],
-    // Enable lint rules for React DOM
-    reactDom.configs.recommended,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+配置 `.env` 文件：
+```bash
+# 复制或创建 .env 文件
+cp .env.example .env
+# 填入你的大模型 API_KEY (默认推荐使用 DeepSeek，极具性价比且逻辑能力强)
 ```
+
+启动服务：
+```bash
+python server.py
+# 服务将运行在 http://localhost:8000
+```
+
+### 2. 启动前端游戏界面
+
+在项目根目录下安装依赖并启动：
+```bash
+npm install
+# 或者使用 pnpm install
+npm run dev
+```
+
+现在，打开浏览器访问 `http://localhost:5173`，点击右上角的 **“新挑战”**，上传你的第一道算法题截图，开启你的勇者之路吧！
