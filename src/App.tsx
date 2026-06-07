@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Arena } from '@/components/game/Arena';
 import { Visualizer } from '@/components/game/Visualizer';
 import { Console } from '@/components/game/Console';
@@ -38,8 +38,35 @@ export default function GamePage() {
     achievements: INITIAL_ACHIEVEMENTS
   });
 
-  // 新成就解锁提示
-  const [newAchievement, setNewAchievement] = useState<Achievement | null>(null);
+  // 新成就解锁提示队列
+  const [achievementQueue, setAchievementQueue] = useState<Achievement[]>([]);
+  const prevAchievementsRef = useRef<Achievement[]>(INITIAL_ACHIEVEMENTS);
+
+  useEffect(() => {
+    const newlyUnlocked = userStats.achievements.filter(
+      (a, i) => a.unlocked && !prevAchievementsRef.current[i].unlocked
+    );
+    if (newlyUnlocked.length > 0) {
+      // 延迟 1 秒后加入队列，避免和胜利弹窗同时出现太突兀
+      const timer = setTimeout(() => {
+        setAchievementQueue(prev => [...prev, ...newlyUnlocked]);
+      }, 1000);
+      prevAchievementsRef.current = userStats.achievements;
+      return () => clearTimeout(timer);
+    }
+    prevAchievementsRef.current = userStats.achievements;
+  }, [userStats.achievements]);
+
+  useEffect(() => {
+    if (achievementQueue.length > 0) {
+      const timer = setTimeout(() => {
+        setAchievementQueue(prev => prev.slice(1));
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [achievementQueue]);
+
+  const currentAchievement = achievementQueue[0];
 
   const handleOptionSelect = (isCorrect: boolean, feedbackMsg: string) => {
     setFeedback(feedbackMsg);
@@ -78,26 +105,22 @@ export default function GamePage() {
               result: 'victory' as const
             }, ...prev.history];
 
-            const newAchievements = [...prev.achievements];
-            let newlyUnlocked: Achievement | null = null;
+            const newAchievements = prev.achievements.map(a => ({ ...a }));
 
-            if (newSolvedCount === 1 && !newAchievements[0].unlocked) {
-              newAchievements[0].unlocked = true; newlyUnlocked = newAchievements[0];
-            } else if (newSolvedCount === 5 && !newAchievements[1].unlocked) {
-              newAchievements[1].unlocked = true; newlyUnlocked = newAchievements[1];
-            } else if (newSolvedCount === 10 && !newAchievements[2].unlocked) {
-              newAchievements[2].unlocked = true; newlyUnlocked = newAchievements[2];
-            } else if (playerHp === 100 && !newAchievements[3].unlocked) {
-              newAchievements[3].unlocked = true; newlyUnlocked = newAchievements[3];
-            } else if (newGold >= 200 && !newAchievements[5].unlocked) {
-              newAchievements[5].unlocked = true; newlyUnlocked = newAchievements[5];
+            if (newSolvedCount >= 1 && !newAchievements[0].unlocked) {
+              newAchievements[0].unlocked = true;
             }
-
-            if (newlyUnlocked) {
-              setTimeout(() => {
-                setNewAchievement(newlyUnlocked);
-                setTimeout(() => setNewAchievement(null), 4000);
-              }, 1000);
+            if (newSolvedCount >= 5 && !newAchievements[1].unlocked) {
+              newAchievements[1].unlocked = true;
+            }
+            if (newSolvedCount >= 10 && !newAchievements[2].unlocked) {
+              newAchievements[2].unlocked = true;
+            }
+            if (playerHp === 100 && !newAchievements[3].unlocked) {
+              newAchievements[3].unlocked = true;
+            }
+            if (newGold >= 200 && !newAchievements[5].unlocked) {
+              newAchievements[5].unlocked = true;
             }
 
             return {
@@ -133,19 +156,10 @@ export default function GamePage() {
             }, ...prev.history];
 
             const deathCount = newHistory.filter(h => h.result === 'defeat').length;
-            const newAchievements = [...prev.achievements];
-            let newlyUnlocked = null;
+            const newAchievements = prev.achievements.map(a => ({ ...a }));
 
-            if (deathCount === 3 && !newAchievements[4].unlocked) {
+            if (deathCount >= 3 && !newAchievements[4].unlocked) {
               newAchievements[4].unlocked = true;
-              newlyUnlocked = newAchievements[4];
-            }
-
-            if (newlyUnlocked) {
-              setTimeout(() => {
-                setNewAchievement(newlyUnlocked);
-                setTimeout(() => setNewAchievement(null), 4000);
-              }, 1000);
             }
 
             return { ...prev, history: newHistory, achievements: newAchievements };
@@ -298,15 +312,15 @@ export default function GamePage() {
       />
 
       {/* Achievement Unlock Toast */}
-      {newAchievement && (
+      {currentAchievement && (
         <div className="fixed bottom-4 right-4 z-50 animate-bounce-short">
           <div className="bg-secondary border-4 border-warning shadow-[0_0_15px_rgba(255,215,0,0.5)] p-4 flex items-center gap-4 min-w-[250px]">
             <div className="w-12 h-12 bg-warning/20 border-2 border-warning flex items-center justify-center rounded-full text-warning">
-              <i className={`ra ${newAchievement.icon} text-2xl animate-pulse`}></i>
+              <i className={`ra ${currentAchievement.icon} text-2xl animate-pulse`}></i>
             </div>
             <div>
               <p className="font-heading text-xs text-warning mb-1">成就解锁！</p>
-              <p className="font-heading text-sm text-white">{newAchievement.title}</p>
+              <p className="font-heading text-sm text-white">{currentAchievement.title}</p>
             </div>
           </div>
         </div>
